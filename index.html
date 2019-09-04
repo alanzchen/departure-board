@@ -11,7 +11,7 @@
 		<script src="./js/departure-board.js"></script>
 		<script>
 		
-			var board = new DepartureBoard (document.getElementById ('test'), { rowCount: 3, letterCount: 17 }); 
+			var board = new DepartureBoard (document.getElementById ('test'), { rowCount: 9, letterCount: 16 }); 
 			board.setValue(['NOW BOOTING', 'XXXXXXXXXXXXXXX']);
 			
 			window.setInterval(function() {
@@ -26,11 +26,18 @@
 				    console.log("HTTP Request Succeeded: " + jqXHR.status);
 				    console.log(data);
 				    var time = new Date();
-				    board.setValue([
-				    	data[0]['DepartureText'] + " / " +  data[1]['DepartureText'],
-				    	data[2]['DepartureText'] + " / " +  data[3]['DepartureText'],
-				    	time.toTimeString()
-				    ]);
+				    var display = [];
+				    var j;
+				    for (var i = 0, l = data.length; i < l; i++) {
+				    	j = i;
+				    	display.push(data[i]['DepartureText'] + " " + data[i]['Description']);
+				    };
+				    for (var i = j, l = 9-3; i < l; i++) {
+				    	display.push("");
+				    };
+				    display.push("---");
+				    display.push(time.toTimeString());
+				    board.setValue(display);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 				    console.log("HTTP Request Failed");

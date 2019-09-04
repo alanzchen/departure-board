@@ -1,7 +1,8 @@
 <html>
 	<head>
-		<title>JavaScript/CSS3 Departure Board</title>
+		<title>Departure Board</title>
 		<link rel="stylesheet" href="./css/departure-board.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	
 	<body>
@@ -10,12 +11,36 @@
 		<script src="./js/departure-board.js"></script>
 		<script>
 		
-			var board = new DepartureBoard (document.getElementById ('test'), { rowCount: 2, letterCount: 25 }); 
-			board.setValue (['19:30 London King\'s Cross', '19:42 Sheffield']);
+			var board = new DepartureBoard (document.getElementById ('test'), { rowCount: 3, letterCount: 17 }); 
+			board.setValue(['NOW BOOTING', 'XXXXXXXXXXXXXXX']);
 			
 			window.setTimeout (function () {
-			 	board.setValue ('19:42 Sheffield');
-			}, 12000);
+				jQuery.ajax({
+				    url: "http://svc.metrotransit.org/NexTrip/902/3/PSPK",
+				    type: "GET",
+				    data: {
+				        "format": "json",
+				    },
+				})
+				.done(function(data, textStatus, jqXHR) {
+				    console.log("HTTP Request Succeeded: " + jqXHR.status);
+				    console.log(data);
+				    var time = new Date();
+				    board.setValue([
+				    	data[0]['DepartureText'] + " / " +  data[1]['DepartureText'],
+				    	data[2]['DepartureText'] + " / " +  data[3]['DepartureText'],
+				    	time.toTimeString()
+				    	]);
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+				    console.log("HTTP Request Failed");
+				})
+				.always(function() {
+				    /* ... */
+				});
+			}, 10000);
+
+
 
 		</script>
 	</body>

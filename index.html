@@ -21,7 +21,7 @@
 		<script>
 		
 			var board = new DepartureBoard (document.getElementById ('test'), { rowCount: 9, letterCount: 16 }); 
-			board.setValue(['NOW BOOTING', 'XXXXXXXXXXXXXXX']);
+			board.setValue(['NOW BOOTING']);
 			
 			window.setInterval(function() {
 				jQuery.ajax({
@@ -39,7 +39,8 @@
 				    var j;
 				    for (var i = 0, l = data.length; i < l; i++) {
 				    	j = i;
-				    	display.push(data[i]['DepartureText'] + " " + data[i]['Description']);
+				    	var s = data[i]['DepartureText'] + "             "
+				    	display.push(s.slice(0, 8) + " " + data[i]['Description']);
 				    };
 				    for (var i = j, l = 9-3; i < l; i++) {
 				    	display.push("");
